@@ -6,3 +6,5 @@ C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\obj\Debug\Projec
 C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\obj\Debug\Project.pdb
 C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\DataMining.dll
 C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\DataMining.pdb
+C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\adult.data
+C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\adult.test
