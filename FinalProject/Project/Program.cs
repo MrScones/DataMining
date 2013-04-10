@@ -17,7 +17,7 @@ namespace Project
             //Input and Output CSV file handlers
             var input = new CsvFileIO(
                 filepath: inputFile,
-                hasHeaders: false,
+                hasHeaders: true,
                 delimiter: ","
             );
 
