@@ -1,0 +1,5 @@
+C:\Projects\DataMining\DataMining\bin\Debug\DataMining.dll
+C:\Projects\DataMining\DataMining\bin\Debug\DataMining.pdb
+C:\Projects\DataMining\DataMining\obj\Debug\DataMining.dll
+C:\Projects\DataMining\DataMining\obj\Debug\DataMining.pdb
+C:\Projects\DataMining\DataMining\obj\Debug\DataMining.csprojResolveAssemblyReference.cache

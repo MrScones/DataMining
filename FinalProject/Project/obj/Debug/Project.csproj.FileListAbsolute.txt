@@ -1,0 +1,6 @@
+C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\Project.exe.config
+C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\Project.exe
+C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\Project.pdb
+C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\obj\Debug\Project.csprojResolveAssemblyReference.cache
+C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\obj\Debug\Project.exe
+C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\obj\Debug\Project.pdb
