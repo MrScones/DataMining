@@ -1,10 +1,7 @@
 ﻿using DataMining.Core;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataMining.Apriori
 {
@@ -23,17 +20,43 @@ namespace DataMining.Apriori
         {
             List<Set> sets = GenerateInitialSets(data);
             List<Set> oldSets = null;
+            var pruneList = new List<Set>();
+
             while (sets.Count > 0)
             {
                 oldSets = sets;
                 sets = GenerateFrequentSets(sets);
+                sets = Prune(sets, pruneList);
                 sets = CalculateSupport(data, sets);
+
+                //Add sets to pruneList.
+                pruneList.AddRange(sets.Where(set => set.SupportCount < _threshold));
                 //Remove sets according to threshold
                 sets = sets
-                    .Where(set => set.Count >= _threshold)
+                    .Where(set => set.SupportCount >= _threshold)
                     .ToList();
             }
             return oldSets;
+        }
+
+        private List<Set> Prune(List<Set> sets, List<Set> pruneList)
+        {
+            bool contains;
+            foreach (var pruneSet in pruneList)
+            {
+                for (int i = sets.Count - 1; i >= 0; i--)
+                {
+                    contains = false;
+                    if (sets[i].Contains(pruneSet))
+                    {
+                        sets.Remove(sets[i]);
+                        contains = true;
+                    }
+                    if (contains) break;
+                }
+            }
+
+            return sets;
         }
 
         private List<Set> GenerateFrequentSets(List<Set> sets)
@@ -73,7 +96,7 @@ namespace DataMining.Apriori
                     {
                         if (row[item.Column].ToString() != item.Value) hasSupport = false;
                     }
-                    if (hasSupport) set.Count++;
+                    if (hasSupport) set.SupportCount++;
                 }
             }
             return sets;
@@ -91,17 +114,17 @@ namespace DataMining.Apriori
                     var set = new Set(item);
                     if (!sets.Contains(set))
                     {
-                        set.Count++;
+                        set.SupportCount++;
                         sets.Add(set);
                     } 
                     else
-                        sets.First(s => s.Equals(set)).Count++;
+                        sets.First(s => s.Equals(set)).SupportCount++;
                 }
             }
 
             //Remove sets according to threshold
             return sets
-                .Where(set => set.Count >= _threshold)
+                .Where(set => set.SupportCount >= _threshold)
                 .ToList();
         }
     }

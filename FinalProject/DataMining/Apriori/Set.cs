@@ -10,12 +10,12 @@ namespace DataMining.Apriori
     {
         private SortedSet<Item> _set;
 
-        public int Count { get; set; }
+        public int SupportCount { get; set; }
 
         public Set()
         {
             _set = new SortedSet<Item>();
-            Count = 0;
+            SupportCount = 0;
         }
 
         public Set(Item item) : this()
@@ -49,6 +49,21 @@ namespace DataMining.Apriori
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
+        }
+
+        public bool Contains(Set other)
+        {
+            bool contains;
+            foreach (var otherItem in other.Items)
+            {
+                contains = false;
+                foreach (var item in Items)
+                {
+                    if (item == otherItem) contains = true;
+                }
+                if (!contains) return false;
+            }
+            return true;
         }
     }
 }

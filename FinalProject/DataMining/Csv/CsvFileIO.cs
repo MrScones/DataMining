@@ -66,7 +66,7 @@ namespace DataMining.Csv
 
         public void Save(DataCollection data)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if(_hasHeaders)
                 sb.AppendLine(string.Join(_delimiter, data.ColumnNames));
