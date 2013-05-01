@@ -204,6 +204,29 @@ namespace DataMining.Statistics
             return values[values.Count - uQ];
         }
 
+        public double calculateSkew(DataCollection data)
+        {
+            double mean = calculateMean(data);
+            double sDev = calculateDeviation(data);
+            double runningSum = 0;
+            double number;
+            int count = 0;
+
+            data[columnName].ForEach(value =>
+            {
+                if (!string.IsNullOrEmpty(value) && Double.TryParse(value, out number))
+                {
+                    runningSum += Math.Pow((number - mean), 3);
+                    count++;
+                }
+            });
+
+            count--;
+
+            sDev = Math.Pow(sDev, 3);
+            return runningSum / (sDev * count);
+        }
+
 
         private bool compDoubles(double a, double b)
         {
