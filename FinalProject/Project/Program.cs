@@ -25,11 +25,9 @@ namespace Project
             );
 
             var manager = new PreprocessingManager(input);
-            //Treat age column as numeric values.
-            manager.Data.SetColumnType("age", DataType.Numeric);
 
+            //Give labels to age ranges using equal width binning technique.
             manager.AddProcessor(new EqualWidthBinLabeling("age", 5));
-
             //Give missing values in occupation column the label 'Unknown'.
             manager.AddProcessor(new ChangeValue("occupation", value => value == "?" ? "Unknown" : value));
             //Give missing values in native-country column the label 'Unknown'.
@@ -37,6 +35,7 @@ namespace Project
 
             //Preprocess data.
             manager.Run();
+
             foreach (var ageRange in manager.Data["age"]
                 .GroupBy(a => a)
                 .Select(group => new {group.Key, Count = group.Count()})
@@ -45,6 +44,7 @@ namespace Project
                 Console.WriteLine(ageRange.Key + ": " + ageRange.Count);
             }
             Console.Read();
+
             //Calculate Apriori threshold from a 1 % support.
             var threshold = (int)Math.Round(manager.Data.Rows.Count * 0.01);
             var apriori = new AprioriAlgorithm(threshold, "age", "sex", "income", "marital-status");
