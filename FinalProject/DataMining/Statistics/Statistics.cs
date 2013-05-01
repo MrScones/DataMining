@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace DataMining.Statistics
 {
-    class Statistics
+    public class Statistics
     {
         private String columnName;
 
@@ -107,6 +107,101 @@ namespace DataMining.Statistics
             mode = currentMax[0];
 
             return mode;
+        }
+
+
+        public double maxValue(DataCollection data)
+        {
+            double number;
+            double currentMax = 0;
+
+            data[columnName].ForEach(value =>
+            {
+                if (!string.IsNullOrEmpty(value) && Double.TryParse(value, out number))
+                {
+                    currentMax = Math.Max(number, currentMax);
+                }
+            });
+
+            return currentMax;
+        }
+
+        public double minValue(DataCollection data)
+        {
+            double number;
+            double currentMin = 0;
+
+            data[columnName].ForEach(value =>
+            {
+                if (!string.IsNullOrEmpty(value) && Double.TryParse(value, out number))
+                {
+                    currentMin = Math.Min(number, currentMin);
+                }
+            });
+
+            return currentMin;
+        }
+
+        public double calculateDeviation(DataCollection data)
+        {
+            double mean = calculateMean(data);
+            double variance;
+            double runningSum = 0;
+            double number;
+            int count = 0;
+
+            data[columnName].ForEach(value =>
+            {
+                if (!string.IsNullOrEmpty(value) && Double.TryParse(value, out number))
+                {
+                    runningSum += Math.Pow((number - mean), 2);
+                    count++;
+                }
+            });
+            variance = runningSum / count;
+
+            return Math.Sqrt(variance);
+        }
+
+        public double lowerQuartile(DataCollection data){
+            List<double> values = new List<double>();
+            double tempResult;
+            int mid;
+            int lQ;
+
+            data[columnName].ForEach(value =>
+            {
+                if (!string.IsNullOrEmpty(value) && Double.TryParse(value, out tempResult))
+                    values.Add(tempResult);
+            });
+
+            values.Sort();
+
+            mid = (int)Math.Ceiling(values.Count / 2.0);
+            lQ = (int)Math.Ceiling(mid / 2.0);
+
+            return values[lQ];
+        }
+
+        public double upperQuartile(DataCollection data)
+        {
+            List<double> values = new List<double>();
+            double tempResult;
+            int mid;
+            int uQ;
+
+            data[columnName].ForEach(value =>
+            {
+                if (!string.IsNullOrEmpty(value) && Double.TryParse(value, out tempResult))
+                    values.Add(tempResult);
+            });
+
+            values.Sort();
+
+            mid = (int)Math.Ceiling(values.Count / 2.0);
+            uQ = (int)Math.Ceiling((values.Count - mid) / 2.0);
+
+            return values[values.Count - uQ];
         }
 
 
