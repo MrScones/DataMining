@@ -13,3 +13,8 @@ C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\DataMining\obj\Debu
 C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\DataMining\obj\Debug\DataMining.dll
 C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\DataMining\obj\Debug\DataMining.pdb
 C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\DataMining\obj\Debug\DataMining.csprojResolveAssemblyReference.cache
+C:\Users\HP\Documents\GitHub\DataMining\FinalProject\DataMining\bin\Debug\DataMining.dll
+C:\Users\HP\Documents\GitHub\DataMining\FinalProject\DataMining\bin\Debug\DataMining.pdb
+C:\Users\HP\Documents\GitHub\DataMining\FinalProject\DataMining\obj\Debug\DataMining.csprojResolveAssemblyReference.cache
+C:\Users\HP\Documents\GitHub\DataMining\FinalProject\DataMining\obj\Debug\DataMining.dll
+C:\Users\HP\Documents\GitHub\DataMining\FinalProject\DataMining\obj\Debug\DataMining.pdb
