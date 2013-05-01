@@ -59,6 +59,7 @@
     <Compile Include="Preprocessing\IDataProcessor.cs" />
     <Compile Include="Csv\CsvFileIO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Statistics\Statistics.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

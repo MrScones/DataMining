@@ -8,3 +8,13 @@ C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\DataMi
 C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\DataMining.pdb
 C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\adult.data
 C:\Users\Jones\Documents\GitHub\DataMining\FinalProject\Project\bin\Debug\adult.test
+C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\Project\bin\Debug\Project.exe.config
+C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\Project\obj\Debug\Project.exe
+C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\Project\obj\Debug\Project.pdb
+C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\Project\bin\Debug\adult.data
+C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\Project\bin\Debug\adult.test
+C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\Project\bin\Debug\Project.exe
+C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\Project\bin\Debug\Project.pdb
+C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\Project\bin\Debug\DataMining.dll
+C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\Project\bin\Debug\DataMining.pdb
+C:\Users\Feriluce\Dropbox\DataMining\DataMining\FinalProject\Project\obj\Debug\Project.csprojResolveAssemblyReference.cache
