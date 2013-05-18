@@ -38,7 +38,7 @@ namespace Project
 
             foreach (var ageRange in manager.Data["age"]
                 .GroupBy(a => a)
-                .Select(group => new {group.Key, Count = group.Count()})
+                .Select(group => new { group.Key, Count = group.Count() })
                 .OrderBy(group => group.Key))
             {
                 Console.WriteLine(ageRange.Key + ": " + ageRange.Count);
@@ -53,8 +53,18 @@ namespace Project
             foreach (var set in results)
             {
                 Console.WriteLine(string.Format("FS: {0}  SupportCount: {1}", set.ToString(), set.SupportCount));
+                
+                //Print Equation 6.1 page. 245 in DM book.
+                var confidenceResults = apriori.CalculateConfidence(manager.Data, set, 0.70);
+                foreach (var confidence in confidenceResults)
+                {
+                    Set rightsideOfRule = set;
+                    rightsideOfRule.Except(confidence.Items);
+                    Console.WriteLine(string.Format("   - {0}  --> {1}[Support = {2:P2}, Confidence = {3:P2}]", confidence.ToString(), rightsideOfRule.ToString(), (double)confidence.SupportCount / manager.Data.Rows.Count, confidence.Confidence));
+                }
             }
 
+            Console.Read();
             Console.Read();
         }
 

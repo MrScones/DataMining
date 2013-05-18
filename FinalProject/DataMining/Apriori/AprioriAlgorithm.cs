@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System;
 
 namespace DataMining.Apriori
 {
@@ -125,6 +126,20 @@ namespace DataMining.Apriori
             //Remove sets according to threshold
             return sets
                 .Where(set => set.SupportCount >= _threshold)
+                .ToList();
+        }
+
+        public List<Set> CalculateConfidence(DataCollection data, Set set, double minimumSupport)
+        {
+            List<Set> subsets = set.GenerateNonEmptySubset();
+            subsets = CalculateSupport(data, subsets);
+            foreach (var subset in subsets)
+            {
+                subset.Confidence = (double)set.SupportCount / subset.SupportCount;
+             }
+
+            return subsets
+                .Where(subset => subset.Confidence >= minimumSupport)
                 .ToList();
         }
     }

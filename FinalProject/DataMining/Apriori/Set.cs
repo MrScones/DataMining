@@ -11,11 +11,13 @@ namespace DataMining.Apriori
         private SortedSet<Item> _set;
 
         public int SupportCount { get; set; }
+        public double Confidence { get; set; }
 
         public Set()
         {
             _set = new SortedSet<Item>();
             SupportCount = 0;
+            Confidence = 0;
         }
 
         public Set(Item item) : this()
@@ -64,6 +66,35 @@ namespace DataMining.Apriori
                 if (!contains) return false;
             }
             return true;
+        }
+        public List<Set> GenerateNonEmptySubset()
+        {
+            List<Set> result = new List<Set>();
+            Set set = null;
+            foreach (var item in GetPowerSet<Item>(_set))
+	        {
+                set = new Set();
+                foreach (var item1 in item.ToList())
+	            {
+                    set.SetAdd(item1);
+	            }
+                result.Add(set);
+	        }
+            return result;
+        }
+
+        private IEnumerable<IEnumerable<T>> GetPowerSet<T>(IEnumerable<T> input)
+        {
+            var seed = new List<IEnumerable<T>>() { Enumerable.Empty<T>() }
+              as IEnumerable<IEnumerable<T>>;
+
+            return input.Aggregate(seed, (a, b) =>
+              a.Concat(a.Select(x => x.Concat(new List<T>() { b }))));
+        }
+
+        public void Except(ICollection<Item> items)
+        {
+            _set.ExceptWith(items);
         }
     }
 }
