@@ -46,6 +46,7 @@
     <Compile Include="Core\DataType.cs" />
     <Compile Include="Knn\KnnAlgorithm.cs" />
     <Compile Include="Preprocessing\ChangeValue.cs" />
+    <Compile Include="Preprocessing\DeleteRows.cs" />
     <Compile Include="Preprocessing\DeleteRowsWithMissingValue.cs" />
     <Compile Include="Preprocessing\EqualWidthBinLabeling.cs" />
     <Compile Include="Preprocessing\FillMissingWithMean.cs" />

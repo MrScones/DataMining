@@ -18,6 +18,9 @@ namespace DataMining.Knn
         private int _k;
         private int _maxNominalDistance;
 
+        public int CorrectPredictions { get; set; }
+        public int WrongPredictions { get; set; }
+
         public KnnAlgorithm(int k,DataCollection trainingSet, DataCollection testSet, string classColumn, int maxNominalDistance, params string[] processColumns)
         {
             _k = k;
@@ -26,6 +29,8 @@ namespace DataMining.Knn
             _classColumn = classColumn;
             _processColumns = processColumns;
             _maxNominalDistance = maxNominalDistance;
+            CorrectPredictions = 0;
+            WrongPredictions = 0;
         }
 
         public void Calculate()
@@ -36,7 +41,14 @@ namespace DataMining.Knn
 
             foreach (DataRow row in _testSet.Rows)
             {
-                row[_classColumn] = CalculateClass(row, _trainingSet);
+                var predictedValue = CalculateClass(row, _trainingSet);
+
+                if(row[_classColumn] as string == predictedValue)
+                    CorrectPredictions++;
+                else
+                    WrongPredictions++;
+
+                row[_classColumn] = predictedValue;
             }
         }
 

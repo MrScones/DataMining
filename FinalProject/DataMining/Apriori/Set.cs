@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -67,11 +68,12 @@ namespace DataMining.Apriori
             }
             return true;
         }
+
         public List<Set> GenerateNonEmptySubset()
         {
             List<Set> result = new List<Set>();
             Set set = null;
-            foreach (var item in GetPowerSet<Item>(_set))
+            foreach (var item in GetPowerSet(_set))
 	        {
                 set = new Set();
                 foreach (var item1 in item.ToList())
@@ -83,13 +85,12 @@ namespace DataMining.Apriori
             return result;
         }
 
-        private IEnumerable<IEnumerable<T>> GetPowerSet<T>(IEnumerable<T> input)
+        private IEnumerable<IEnumerable<Item>> GetPowerSet(IEnumerable<Item> input)
         {
-            var seed = new List<IEnumerable<T>>() { Enumerable.Empty<T>() }
-              as IEnumerable<IEnumerable<T>>;
+            var seed = new List<IEnumerable<Item>>(){Enumerable.Empty<Item>()};
 
-            return input.Aggregate(seed, (a, b) =>
-              a.Concat(a.Select(x => x.Concat(new List<T>() { b }))));
+            return input.Aggregate(seed.AsEnumerable(), (a, b) =>
+              a.Concat(a.Select(x => x.Concat(new List<Item>() { b }))));
         }
 
         public void Except(ICollection<Item> items)

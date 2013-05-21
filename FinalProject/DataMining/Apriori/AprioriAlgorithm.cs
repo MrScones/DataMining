@@ -142,7 +142,8 @@ namespace DataMining.Apriori
                 .Where(subset => subset.Confidence >= minimumSupport)
                 .ToList();
         }
-        //I took a short cut here to implement lift.
+
+        //Lift.
         public Set CalculateSupport(DataCollection data, Set set)
         {
             foreach (DataRow row in data.Rows)
