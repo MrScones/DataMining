@@ -23,7 +23,7 @@ namespace Project
                 hasHeaders: true,
                 delimiter: ","
             );
-
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
             var manager = new PreprocessingManager(input);
 
             //Give labels to age ranges using equal width binning technique.
@@ -46,21 +46,31 @@ namespace Project
             Console.Read();
 
             //Calculate Apriori threshold from a 1 % support.
-            var threshold = (int)Math.Round(manager.Data.Rows.Count * 0.01);
+            var threshold = (int)Math.Round(manager.Data.Rows.Count * 0.1);
             var apriori = new AprioriAlgorithm(threshold, "age", "sex", "income", "marital-status");
             var results = apriori.Calculate(manager.Data);
 
             foreach (var set in results)
             {
-                Console.WriteLine(string.Format("FS: {0}  SupportCount: {1}", set.ToString(), set.SupportCount));
+                //Console.WriteLine(string.Format("FS: {0}  SupportCount: {1}", set.ToString(), set.SupportCount));
                 
-                //Print Equation 6.1 page. 245 in DM book.
-                var confidenceResults = apriori.CalculateConfidence(manager.Data, set, 0.70);
+                //Print Equation 6.1 page. 245 in DM book + lift stuff
+                var confidenceResults = apriori.CalculateConfidence(manager.Data, set, 0.90);
                 foreach (var confidence in confidenceResults)
                 {
-                    Set rightsideOfRule = set;
+                    //get right side (what is actually implied by some other item/items.)
+                    Set rightsideOfRule = new Set();
+                    rightsideOfRule.Union(set.Items);
                     rightsideOfRule.Except(confidence.Items);
-                    Console.WriteLine(string.Format("   - {0}  --> {1}[Support = {2:P2}, Confidence = {3:P2}]", confidence.ToString(), rightsideOfRule.ToString(), (double)confidence.SupportCount / manager.Data.Rows.Count, confidence.Confidence));
+                    rightsideOfRule = apriori.CalculateSupport(manager.Data, rightsideOfRule);
+                    
+                    //lift calculations:
+                    double probabilityAUB = (double)set.SupportCount / manager.Data.Rows.Count;
+                    double probabilityA = (double)confidence.SupportCount / manager.Data.Rows.Count;
+                    double probabilityB =(double)rightsideOfRule.SupportCount / manager.Data.Rows.Count;
+
+                    double lift = (double)probabilityAUB / (probabilityA * probabilityB);
+                    Console.WriteLine(string.Format("###{0}  --> {1}[Support = {2:P2}, Confidence = {3:P2}, Lift = {4:0.00}]", confidence.ToString(), rightsideOfRule.ToString(), (double)confidence.SupportCount / manager.Data.Rows.Count, confidence.Confidence, lift));
                 }
             }
 
