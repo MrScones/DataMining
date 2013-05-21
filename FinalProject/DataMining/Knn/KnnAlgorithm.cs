@@ -1,4 +1,5 @@
-﻿using DataMining.Preprocessing;
+﻿using System.Threading;
+using DataMining.Preprocessing;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,9 +18,11 @@ namespace DataMining.Knn
         private string[] _processColumns;
         private int _k;
         private int _maxNominalDistance;
+        private int _correct;
+        private int _wrong;
 
-        public int CorrectPredictions { get; set; }
-        public int WrongPredictions { get; set; }
+        public int CorrectPredictions { get { return _correct; } }
+        public int WrongPredictions { get { return _wrong; } }
 
         public KnnAlgorithm(int k,DataCollection trainingSet, DataCollection testSet, string classColumn, int maxNominalDistance, params string[] processColumns)
         {
@@ -29,8 +32,8 @@ namespace DataMining.Knn
             _classColumn = classColumn;
             _processColumns = processColumns;
             _maxNominalDistance = maxNominalDistance;
-            CorrectPredictions = 0;
-            WrongPredictions = 0;
+            _correct = 0;
+            _wrong = 0;
         }
 
         public void Calculate()
@@ -38,37 +41,43 @@ namespace DataMining.Knn
             if (_k < 1) throw new Exception("k must be a positive number");
             if (!_testSet.ColumnNames.Contains(_classColumn)) 
                 _testSet.Columns.Add(_classColumn);
+            Parallel.ForEach(_testSet.Rows.Cast<DataRow>(), row =>
+                {
+                    var predictedValue = CalculateClass(row, _trainingSet);
 
-            foreach (DataRow row in _testSet.Rows)
-            {
-                var predictedValue = CalculateClass(row, _trainingSet);
-
-                if(row[_classColumn] as string == predictedValue)
-                    CorrectPredictions++;
-                else
-                    WrongPredictions++;
-
-                row[_classColumn] = predictedValue;
-            }
+                    if (row[_classColumn] as string == predictedValue)
+                        Interlocked.Increment(ref _correct);
+                    else
+                        Interlocked.Increment(ref _wrong);
+                    lock (this)
+                    {
+                        row[_classColumn] = predictedValue;
+                    }
+                    if ((_correct + _wrong) % 100 == 0)
+                    {
+                        Console.WriteLine(string.Format("Progress... {0}/{1}", _correct + _wrong, _testSet.Rows.Count));
+                        Console.SetCursorPosition(0, Console.CursorTop - 1);
+                    }
+                });
         }
 
         private string CalculateClass(DataRow row, DataCollection data)
         {
             var list = new List<KeyValuePair<double, DataRow>>();
             double distance;
-            foreach(DataRow dataRow in data.Rows)
+            foreach (DataRow dataRow in data.Rows)
             {
                 distance = 0;
-                foreach(var column in _processColumns)
+                foreach (var column in _processColumns)
                 {
                     //For nominal values, use 0 if equal and highest nominal distance if not.
                     if (data.GetColumnType(column) == DataType.Nominal)
                     {
                         distance = (row[column].ToString() == dataRow[column].ToString())
-                            ? 0
-                            : _maxNominalDistance;
+                                        ? 0
+                                        : _maxNominalDistance;
                     }
-                    //For numeric values, use euclidean distance formula.
+                        //For numeric values, use euclidean distance formula.
                     else
                     {
                         double x1 = double.Parse(row[column].ToString());
@@ -77,7 +86,8 @@ namespace DataMining.Knn
                     }
                 }
                 distance = Math.Sqrt(distance);
-                list.Add(new KeyValuePair<double,DataRow>(distance, dataRow));
+                
+                list.Add(new KeyValuePair<double, DataRow>(distance, dataRow));
             }
 
             //Group class and order by occurence desc.

@@ -111,6 +111,8 @@ namespace Project
 
             #region Apriori
 
+            Console.WriteLine("########## Apriori ##########");
+
             //Calculate Apriori threshold from a 1 % support.
             var threshold = (int)Math.Round(manager.Data.Rows.Count * 0.3);
             var apriori = new AprioriAlgorithm(threshold, "age", "sex", "income", "marital-status");
@@ -140,9 +142,13 @@ namespace Project
 
             #endregion
 
+            Console.WriteLine();
+
             #region K-nearest-neighbors
 
-            var knn = new KnnAlgorithm(3, manager.Data, managerTest.Data, "workclass", 1,
+            Console.WriteLine("########## K-nearest-neighbors ##########");
+
+            var knn = new KnnAlgorithm(1, manager.Data, managerTest.Data, "workclass", 1,
                         "age", "education", "occupation", "sex", "capital-gain", 
                         "capital-loss", "hours-per-week", "income");
             
@@ -150,7 +156,7 @@ namespace Project
 
             Console.WriteLine("Correct Predictions: " +knn.CorrectPredictions);
             Console.WriteLine("Wrong Predictions: " + knn.WrongPredictions);
-            Console.WriteLine("Model Accuracy" + knn.CorrectPredictions / manager.Data.Rows.Count);
+            Console.WriteLine("Model Accuracy: " + ((double)knn.CorrectPredictions / (double)manager.Data.Rows.Count));
 
             #endregion
 
