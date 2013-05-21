@@ -12,6 +12,9 @@ namespace DataMining.Knn
 {
     public class KnnAlgorithm
     {
+        private static object _writeLock = new object();
+        private static object _consoleWriteLock = new object();
+
         private DataCollection _trainingSet;
         private DataCollection _testSet;
         private string _classColumn;
@@ -43,25 +46,29 @@ namespace DataMining.Knn
                 _testSet.Columns.Add(_classColumn);
             Parallel.ForEach(_testSet.Rows.Cast<DataRow>(), row =>
                 {
-                    var predictedValue = CalculateClass(row, _trainingSet);
+                    var predictedValue = CalculateClass(row, _trainingSet, _k);
 
                     if (row[_classColumn] as string == predictedValue)
                         Interlocked.Increment(ref _correct);
                     else
                         Interlocked.Increment(ref _wrong);
-                    lock (this)
+                    lock (_writeLock)
                     {
                         row[_classColumn] = predictedValue;
                     }
                     if ((_correct + _wrong) % 100 == 0)
                     {
-                        Console.WriteLine(string.Format("Progress... {0}/{1}", _correct + _wrong, _testSet.Rows.Count));
-                        Console.SetCursorPosition(0, Console.CursorTop - 1);
+                        lock (_consoleWriteLock)
+                        {
+                            Console.WriteLine(string.Format("Progress... {0}/{1}", _correct + _wrong,
+                                                            _testSet.Rows.Count));
+                            Console.SetCursorPosition(0, Console.CursorTop - 1);
+                        }
                     }
                 });
         }
 
-        private string CalculateClass(DataRow row, DataCollection data)
+        private string CalculateClass(DataRow row, DataCollection data, int k)
         {
             var list = new List<KeyValuePair<double, DataRow>>();
             double distance;
@@ -91,7 +98,7 @@ namespace DataMining.Knn
             }
 
             //Group class and order by occurence desc.
-            list = list.OrderBy(kvp => kvp.Key).Take(_k).ToList();
+            list = list.OrderBy(kvp => kvp.Key).Take(k).ToList();
             var groups = (from kvp in list
                           group kvp by kvp.Value[_classColumn].ToString() into grp
                           orderby grp.Count() descending
@@ -100,8 +107,7 @@ namespace DataMining.Knn
             //Check if the maximum class count is unique. If not recalc with k - 1.
             if (groups.Count > 1 && groups[0].Count == groups[1].Count)
             {
-                _k = _k - 1;
-                return CalculateClass(row, data);
+                return CalculateClass(row, data, k - 1);
             }
             else return groups[0].Class;
         }
